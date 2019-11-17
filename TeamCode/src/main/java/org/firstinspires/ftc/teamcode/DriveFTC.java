@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class DriveFTC extends OpMode {
     double speed=1;
     double wPos=0;
-    double [] wPositions={};
+    double [] wPositions={1,0};
     int wIndex;
     double la=1;
     double lspeed=0;
