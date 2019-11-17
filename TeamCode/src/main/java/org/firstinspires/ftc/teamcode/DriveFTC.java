@@ -42,8 +42,8 @@ public class DriveFTC extends OpMode {
         if (gamepad1.dpad_down) {
             speed = .2;
         }
-        double x = gamepad1.left_stick_x * speed; // * (reverse ? -1 : 1);
-        double y = -gamepad1.left_stick_y * speed; // * (reverse ? -1 : 1);
+        double x = gamepad1.left_stick_x * speed;
+        double y = -gamepad1.left_stick_y * speed;
         double turn =-1* gamepad1.right_stick_y * speed;
         leftFront.setPower(x + y + turn);
         rightFront.setPower(-x + y - turn);
