@@ -64,13 +64,12 @@ public class DriveFTC extends OpMode {
         }
 
         if (gamepad2.right_stick_x > 0 && S.getPosition() < 1){
-            S.moveRight();
+            S.setSpeed(1);
         }
         //
         if (gamepad2.right_stick_x < 0 && S.getPosition() > 0){
-            S.moveLeft();
+            S.setSpeed(-1);
         }
-
 
         /*
         while (gamepad2.right_stick_x > 0 && wPos > 0)
@@ -129,11 +128,7 @@ public class DriveFTC extends OpMode {
         */
         //wrist.setPosition(wPos);
 
-
-
         wrist.setPower(S.getData());
-        //double wristx = -gamepad2.right_stick_x;
-        //wrist.setPower(wristx);
         if (gamepad2.left_stick_y>.1)
         {
             //lspeed+=.01;
