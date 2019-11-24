@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -10,6 +11,16 @@ public class AutoFTC extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         //int count =
         //double power = 1;
+        //number of counts required for the robot to turn a full circle
+        int fullcirle;
+
+        //number of counts needed to turn 1 degree
+        int angleconversion = fullcircle/360;
+
+        //number of counts the motor has to run for to go 10cm
+        int countsper10cm = 1050;
+
+
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightFront = hardwareMap.dcMotor.get("rightFront");
@@ -20,9 +31,11 @@ public class AutoFTC extends LinearOpMode {
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
 
-        firstbit(1, 1000);
+        Step1(1, countsper10cm);
+        Step2(90);
     }
-    public void firstbit(double power, int distance){
+    //moves the robot forward 10 cm
+    public void Step1(double power, int distance){
         //reset encoders
         ResetEncoders();
         //set target position
@@ -30,20 +43,25 @@ public class AutoFTC extends LinearOpMode {
         //set to Run to position mode
         SetToRunToPosition();
         //drive at power
-        Drive(power);
+        DriveForward(power);
         while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
 
         }
         //stops driving
         StopDriving();
     }
+    //turns the robot 90 degrees to the left
+    public void Step2(int angle){
+        TurnLeftToAngle(angle);
+    }
+
     public void StopDriving(){
         leftFront.setPower(0);
         leftRear.setPower(0);
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
-    public void Drive(double power){
+    public void DriveForward(double power){
         leftFront.setPower(power);
         leftRear.setPower(power);
         rightFront.setPower(power);
@@ -61,10 +79,51 @@ public class AutoFTC extends LinearOpMode {
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+    //distance is the number of counts that we want each motor to do
     public void SetTargetPosition(int distance){
         leftFront.setTargetPosition(distance);
         leftRear.setTargetPosition(distance);
         rightFront.setTargetPosition(distance);
         rightRear.setTargetPosition(distance);
     }
+    //
+    public void TurnRightToAngle(int angle){
+        int turncounts = angleconversion * angle;
+        //reset encoders
+        ResetEncoders();
+        //set target position
+        SetTargetPosition(turncounts);
+        //set to Run to position mode
+        SetToRunToPosition();
+        //drive at power
+        leftFront.setPower(1);
+        leftRear.setPower(1);
+        rightFront.setPower(-1);
+        rightRear.setPower(-1);
+        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+
+        }
+        //stops driving
+        StopDriving();
+    }
+    public void TurnLeftToAngle(int angle){
+        int turncounts = angleconversion * angle;
+        //reset encoders
+        ResetEncoders();
+        //set target position
+        SetTargetPosition(turncounts);
+        //set to Run to position mode
+        SetToRunToPosition();
+        //drive at power
+        leftFront.setPower(-1);
+        leftRear.setPower(-1);
+        rightFront.setPower(1);
+        rightRear.setPower(1);
+        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+
+        }
+        //stops driving
+        StopDriving();
+    }
 }
+*/

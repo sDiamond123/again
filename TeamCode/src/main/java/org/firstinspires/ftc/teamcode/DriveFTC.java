@@ -15,6 +15,8 @@ public class DriveFTC extends OpMode {
     double lspeed=0;
     CRServo wrist;
     DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
+    ServoController S = new ServoController(1, .5, 1);
+
     @Override
     public void init() {
         linearSlide = hardwareMap.dcMotor.get("linSlide");
@@ -60,6 +62,16 @@ public class DriveFTC extends OpMode {
         if (gamepad2.dpad_down) {
             la = .2;
         }
+
+        if (gamepad2.right_stick_x > 0 && S.getPosition() < 1){
+            S.moveRight();
+        }
+        //
+        if (gamepad2.right_stick_x < 0 && S.getPosition() > 0){
+            S.moveLeft();
+        }
+
+
         /*
         while (gamepad2.right_stick_x > 0 && wPos > 0)
         {
@@ -117,8 +129,11 @@ public class DriveFTC extends OpMode {
         */
         //wrist.setPosition(wPos);
 
-        double wristx = -gamepad2.right_stick_x;
-        wrist.setPower(wristx);
+
+
+        wrist.setPower(S.getData());
+        //double wristx = -gamepad2.right_stick_x;
+        //wrist.setPower(wristx);
         if (gamepad2.left_stick_y>.1)
         {
             //lspeed+=.01;
