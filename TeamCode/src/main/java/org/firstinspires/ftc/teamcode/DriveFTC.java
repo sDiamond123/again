@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 @TeleOp
 public class DriveFTC extends OpMode {
     double speed=1;
@@ -15,7 +14,6 @@ public class DriveFTC extends OpMode {
     double lspeed=0;
     CRServo wrist;
     DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
-    ServoController S = new ServoController(1, .5, 1);
 
     @Override
     public void init() {
@@ -62,15 +60,14 @@ public class DriveFTC extends OpMode {
         if (gamepad2.dpad_down) {
             la = .2;
         }
-
+        /*
         if (gamepad2.right_stick_x > 0 && S.getPosition() < 1){
             S.setSpeed(1);
         }
-        //
         if (gamepad2.right_stick_x < 0 && S.getPosition() > 0){
             S.setSpeed(-1);
         }
-
+        */
         /*
         while (gamepad2.right_stick_x > 0 && wPos > 0)
         {
@@ -128,7 +125,7 @@ public class DriveFTC extends OpMode {
         */
         //wrist.setPosition(wPos);
 
-        wrist.setPower(S.getData());
+        wrist.setPower(gamepad2.right_stick_x);
         if (gamepad2.left_stick_y>.1)
         {
             //lspeed+=.01;
