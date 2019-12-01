@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 @Autonomous
-public class ParkUnderTapeAuto extends LinearOpMode {
+public class PickUpRepositionandParkAutoRed extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
     int angleconversion;
     int fullcircle;
     int countsper10cm;
+    CRServo wrist;
     @Override
     public void runOpMode() throws InterruptedException {
         //int count =
@@ -15,13 +17,11 @@ public class ParkUnderTapeAuto extends LinearOpMode {
         //number of counts required for the robot to turn a full circle
         fullcircle = 12000;
 
-
         //number of counts needed to turn 1 degree
         angleconversion = fullcircle/360;
 
         //number of counts the motor has to run to go 10cm
         countsper10cm = 1050;
-
 
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
@@ -36,28 +36,48 @@ public class ParkUnderTapeAuto extends LinearOpMode {
         waitForStart();
 
         //red team park on tape
-        Step1(1, (int)9.1*countsper10cm);
-        //(90);
-        //Step3(1, 10*countsper10cm);
-        //Step4(90);
-        //Step5(1, countsper10cm);
+        //drives forward to the yellow bricks and opens the wrist
+        Step1(1, countsper10cm);
+        //closes the wrist
+        Step2();
+        //moves back nearer to the wall
+        Step3(1, countsper10cm);
+        //turns right now that it has moved back near the wall
+        Step4(90);
+        //drives to the tape
+        Step5(1, countsper10cm);
+        //lets go of the brick
+        Step6();
+        //continues to drive forward
+        Step7(1, countsper10cm);
+        //turns 90 degrees to the left
+        Step8(90);
     }
     //moves the robot forward 10 cm
     public void Step1(double power, int distance){
         DriveFor(power, distance);
+        wrist.setPower(1);
     }
-    //turns the robot 90 degrees to the left
-    public void Step2(int angle){
-        TurnRightToAngle(angle);
+    public void Step2(){
+        wrist.setPower(-1);
     }
     public void Step3(double power, int distance){
-        DriveFor(power, distance);
+        DriveFor(-power, distance);
     }
     public void Step4(int angle){
-        TurnLeftToAngle(angle);
+        TurnRightToAngle(angle);
     }
     public void Step5(double power, int distance){
         DriveFor(power, distance);
+    }
+    public void Step6(){
+        wrist.setPower(0);
+    }
+    public void Step7(double power, int distance){
+        DriveFor(power, distance);
+    }
+    public void Step8(int angle){
+        TurnLeftToAngle(angle);
     }
     public void StopDriving(){
         leftFront.setPower(0);
