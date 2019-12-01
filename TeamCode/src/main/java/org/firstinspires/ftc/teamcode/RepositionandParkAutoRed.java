@@ -2,54 +2,82 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.CRServo;
 @Autonomous
-public class ParkUnderTapeAutoBlue extends LinearOpMode {
-    DcMotor leftFront, leftRear, rightFront, rightRear;
+public class RepositionandParkAutoRed extends LinearOpMode {
+    DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
     int angleconversion;
     int fullcircle;
     int countsper10cm;
+    CRServo wrist;
+
     @Override
     public void runOpMode() throws InterruptedException {
         //int count =
         //double power = 1;
         //number of counts required for the robot to turn a full circle
-        fullcircle = 12000;
-
+        fullcircle = 5500;
 
         //number of counts needed to turn 1 degree
-        angleconversion = fullcircle/360;
+        angleconversion = fullcircle / 360;
 
         //number of counts the motor has to run to go 10cm
         countsper10cm = 1050;
 
-
+        linearSlide = hardwareMap.dcMotor.get("linSlide");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightRear = hardwareMap.dcMotor.get("rightRear");
-        //rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        //rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        wrist = hardwareMap.crservo.get("wrist");
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        linearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
 
-        //red team park on tape
-        Step1(1, (int)2.8*countsper10cm);
-    }
 
-    //moves the robot forward 10 cm
-    public void Step1(double power, int distance){
+        //Step5(1, 6 * countsper10cm);
+        //turns 90 degrees to the left
+        //Step8(90);
+        //moves forward and moves the linear slide up
+        Step9(1, (int)2.6 * countsper10cm, -300);
+        Step10(.5, (int)250);
+        //Step11(1, (int)-2.8 * countsper10cm);
+    }
+    // Repositioning steps
+    //public void rStep1 {
+    // }
+    public void Step5(double power, int distance) {
         DriveFor(power, distance);
     }
+
+    public void Step8(int angle) {
+        TurnLeftToAngle(angle);
+    }
+
+    public void Step9(double power, int distance, int raise) {
+        //DriveFor(power, distance);
+        MoveLinearSlide(power, raise);
+    }
+
+    public void Step10(double power, int raise){
+        MoveLinearSlide(power, raise);
+    }
+    public void Step11(double power, int distance){
+        DriveFor(power, distance);
+    }
+
     public void StopDriving(){
         leftFront.setPower(0);
         leftRear.setPower(0);
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
-
     public void DriveFor(double power, int distance){
         //reset encoders
         ResetEncoders();
@@ -96,7 +124,10 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         //reset encoders
         ResetEncoders();
         //set target position
-        SetTargetPosition(turncounts);
+        leftFront.setTargetPosition(turncounts);
+        leftRear.setTargetPosition(turncounts);
+        rightFront.setTargetPosition(-turncounts);
+        rightRear.setTargetPosition(-turncounts);
         //set to Run to position mode
         SetToRunToPosition();
         //drive at power
@@ -115,12 +146,15 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         //reset encoders
         ResetEncoders();
         //set target position
-        SetTargetPosition(turncounts);
+        leftFront.setTargetPosition(-turncounts);
+        leftRear.setTargetPosition(-turncounts);
+        rightFront.setTargetPosition(turncounts);
+        rightRear.setTargetPosition(turncounts);
         //set to Run to position mode
         SetToRunToPosition();
-        //drive at power
-        leftFront.setPower(-1);
-        leftRear.setPower(-1);
+        //drive at
+        leftFront.setPower(1);
+        leftRear.setPower(1);
         rightFront.setPower(1);
         rightRear.setPower(1);
         while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
@@ -128,5 +162,25 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         }
         //stops driving
         StopDriving();
+    }
+    public void MoveLinearSlide(double power, int raise){
+        //reset encoders
+        linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //set target position
+        linearSlide.setTargetPosition(raise);
+        //set to Run to position mode
+        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //drive at power
+        linearSlide.setPower(power);
+        //while loop that keeps the method going until the motors finish
+        while(linearSlide.isBusy()){
+
+        }
+        //if((((raise - 10)) <= linearSlide.getCurrentPosition()) && (linearSlide.getCurrentPosition() <= (raise + 10))){
+            StopDriving();
+        //}
+
+        //stops driving
+
     }
 }
