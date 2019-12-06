@@ -36,6 +36,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         wrist = hardwareMap.crservo.get("wrist");
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        linearSlide.setDirection(DcMotorSimple.Direction.REVERSE);
         linearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -44,9 +45,9 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         waitForStart();
 
         //drives forward to the yellow bricks and opens the wrist
-        Step1(1, (int)2.5 *countsper10cm);
+        //Step1(1, (int)2.5 *countsper10cm);
         //closes the wrist
-        Step2();
+        //Step2();
         //moves back nearer to the wall
     /*    Step3(1, 2 * countsper10cm);
         //turns right now that it has moved back near the wall
@@ -58,9 +59,11 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //continues to drive forward
         Step7(1, (int) 3.5 * countsper10cm);
         //turns 90 degrees to the left
-        Step8(90);
+        Step8(90); */
         //moves forward and moves the linear slide up
-        Step9(1, 2 * countsper10cm, 5); */
+        Step9(1, 300);
+        Step10(1, (int)2.8 * countsper10cm);
+        Step11(1, -275);
     }
     // Repositioning steps
 
@@ -72,7 +75,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
     //moves the robot forward 10 cm
     public void Step1(double power, int distance){
         DriveFor(power, distance);
-        wrist.setPower(1);
+        //wrist.setPower(1);
     }
     public void Step2(){
         wrist.setPower(-1);
@@ -95,9 +98,16 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
     public void Step8(int angle){
         TurnLeftToAngle(angle);
     }
-    public void Step9(double power, int distance, int raise){
+    public void Step9(double power, int raise){
+        //the timeout here is how long you are giving the linearslide to raise
+        MoveLinearSlide(power, raise, (int)2.5);
+    }
+    public void Step10(double power, int distance){
         DriveFor(power, distance);
-        MoveLinearSlide(power, raise);
+        //the timeout here is how long you are giving the linearslide to raise
+    }
+    public void Step11(double power, int raise){
+        MoveLinearSlide(power, raise, 1);
     }
     public void StopDriving(){
         leftFront.setPower(0);
@@ -185,6 +195,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         StopDriving();
     }
     public void MoveLinearSlide(double power, int raise, int timeoutS){
+        runtime.reset();
         //reset encoders
         linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //set target position
@@ -194,7 +205,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //drive at power
         linearSlide.setPower(power);
         //while loop that keeps the method going until the motors finish
-        while(linearSlide.isBusy() && (runtime < timeoutS)){
+        while(linearSlide.isBusy() && (runtime.seconds() < timeoutS)){
         }
         //stops driving
         StopDriving();
