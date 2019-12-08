@@ -3,12 +3,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 @Autonomous
 public class ParkUnderTapeAutoRed extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
     int angleconversion;
     int fullcircle;
     int countsper10cm;
+    private ElapsedTime
+            runtime = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
         //int count =
@@ -16,13 +20,11 @@ public class ParkUnderTapeAutoRed extends LinearOpMode {
         //number of counts required for the robot to turn a full circle
         fullcircle = 12000;
 
-
         //number of counts needed to turn 1 degree
-        angleconversion = fullcircle/360;
+        angleconversion = fullcircle / 360;
 
         //number of counts the motor has to run to go 10cm
         countsper10cm = 1050;
-
 
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
@@ -37,114 +39,56 @@ public class ParkUnderTapeAutoRed extends LinearOpMode {
         waitForStart();
 
         //red team park on tape
-        Step1(1, (int)2.8 * countsper10cm);
-        //(90);
-        //Step3(1, 10*countsper10cm);
-        //Step4(90);
-        //Step5(1, countsper10cm);
+        Step1(1, (int) 2.8 * countsper10cm, 3);
     }
 
     //moves the robot forward 10 cm
-    public void Step1(double power, int distance){
-        DriveFor(power, distance);
+    public void Step1(double power, int distance, int timeoutS) {
+        DriveFor(power, distance, timeoutS);
     }
-    //turns the robot 90 degrees to the left
-    public void Step2(int angle){
-        TurnRightToAngle(angle);
-    }
-    public void Step3(double power, int distance){
-        DriveFor(power, distance);
-    }
-    public void Step4(int angle){
-        TurnLeftToAngle(angle);
-    }
-    public void Step5(double power, int distance){
-        DriveFor(power, distance);
-    }
-    public void StopDriving(){
+    public void StopDriving() {
         leftFront.setPower(0);
         leftRear.setPower(0);
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
-
-    public void DriveFor(double power, int distance){
-        //reset encoders
+    public void DriveFor(double power, int distance, int timeoutS) {       //reset encoders
+        runtime.reset();
         ResetEncoders();
         //set target position
-        SetTargetPosition(distance);
-        //set to Run to position mode
+        SetTargetPosition(distance);//set to Run to position mode
         SetToRunToPosition();
         //drive at power
         DriveForward(power);
         //while loop that keeps the method going until the motors finish
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+        while ((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (timeoutS > runtime.seconds())) {
         }
         //stops driving
         StopDriving();
     }
-    public void DriveForward(double power){
+    public void DriveForward(double power) {
         leftFront.setPower(power);
         leftRear.setPower(power);
-        rightFront.setPower(power);
-        rightRear.setPower(power);
+        rightFront.setPower(-power);
+        rightRear.setPower(-power);
     }
-    public void ResetEncoders(){
+    public void ResetEncoders() {
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    public void SetToRunToPosition(){
+    public void SetToRunToPosition() {
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     //distance is the number of counts that we want each motor to do
-    public void SetTargetPosition(int distance){
+    public void SetTargetPosition(int distance) {
         leftFront.setTargetPosition(distance);
         leftRear.setTargetPosition(distance);
         rightFront.setTargetPosition(distance);
         rightRear.setTargetPosition(distance);
-    }
-    //
-    public void TurnRightToAngle(int angle){
-        int turncounts = angleconversion * angle;
-        //reset encoders
-        ResetEncoders();
-        //set target position
-        SetTargetPosition(turncounts);
-        //set to Run to position mode
-        SetToRunToPosition();
-        //drive at power
-        leftFront.setPower(1);
-        leftRear.setPower(1);
-        rightFront.setPower(-1);
-        rightRear.setPower(-1);
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
-
-        }
-        //stops driving
-        StopDriving();
-    }
-    public void TurnLeftToAngle(int angle){
-        int turncounts = angleconversion * angle;
-        //reset encoders
-        ResetEncoders();
-        //set target position
-        SetTargetPosition(turncounts);
-        //set to Run to position mode
-        SetToRunToPosition();
-        //drive at power
-        leftFront.setPower(-1);
-        leftRear.setPower(-1);
-        rightFront.setPower(1);
-        rightRear.setPower(1);
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
-
-        }
-        //stops driving
-        StopDriving();
     }
 }

@@ -1,8 +1,11 @@
+/*
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 @Autonomous
 public class PickUpandParkAutoRed extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
@@ -10,16 +13,15 @@ public class PickUpandParkAutoRed extends LinearOpMode {
     int fullcircle;
     int countsper10cm;
     CRServo wrist;
+    private ElapsedTime
+            runtime = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
-        //int count =
         //double power = 1;
         //number of counts required for the robot to turn a full circle
         fullcircle = 12000;
-
         //number of counts needed to turn 1 degree
         angleconversion = fullcircle/360;
-
         //number of counts the motor has to run to go 10cm
         countsper10cm = 1050;
 
@@ -50,8 +52,8 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         Step6();
     }
     //moves the robot forward 10 cm
-    public void Step1(double power, int distance){
-        DriveFor(power, distance);
+    public void Step1(double power, int distance, int timeoutS){
+        DriveFor(power, distance, 3);
         wrist.setPower(1);
     }
     public void Step2(){
@@ -61,7 +63,7 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         DriveFor(-power, distance);
     }
     public void Step4(int angle){
-        TurnRightToAngle(angle);
+        TurnRightToAngle(angle,);
     }
     public void Step5(double power, int distance){
         DriveFor(power, distance);
@@ -75,18 +77,16 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
-
-    public void DriveFor(double power, int distance){
-        //reset encoders
+    public void DriveFor(double power, int distance, int timeoutS){       //reset encoders
+        runtime.reset();
         ResetEncoders();
         //set target position
-        SetTargetPosition(distance);
-        //set to Run to position mode
+        SetTargetPosition(distance);//set to Run to position mode
         SetToRunToPosition();
         //drive at power
         DriveForward(power);
         //while loop that keeps the method going until the motors finish
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (timeoutS > runtime.seconds())){
         }
         //stops driving
         StopDriving();
@@ -116,8 +116,7 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         rightFront.setTargetPosition(distance);
         rightRear.setTargetPosition(distance);
     }
-    //
-    public void TurnRightToAngle(int angle){
+    public void TurnRightToAngle(int angle, int timeoutS){
         int turncounts = angleconversion * angle;
         //reset encoders
         ResetEncoders();
@@ -130,14 +129,15 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         leftRear.setPower(1);
         rightFront.setPower(-1);
         rightRear.setPower(-1);
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+        while((timeoutS < runtime.seconds()) && (leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy())){
 
         }
         //stops driving
         StopDriving();
     }
-    public void TurnLeftToAngle(int angle){
+    public void TurnLeftToAngle(int angle, int timeoutS){
         int turncounts = angleconversion * angle;
+        runtime.reset();
         //reset encoders
         ResetEncoders();
         //set target position
@@ -149,10 +149,28 @@ public class PickUpandParkAutoRed extends LinearOpMode {
         leftRear.setPower(-1);
         rightFront.setPower(1);
         rightRear.setPower(1);
-        while(leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()){
+        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (runtime.seconds() > timeoutS)) {
 
         }
         //stops driving
         StopDriving();
     }
+    public void MoveLinearSlide(double power, int raise, int timeoutS){
+        runtime.reset();
+        //reset encoders
+        linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //set target position
+        linearSlide.setTargetPosition(raise);
+        //set to Run to position mode
+        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //drive at power
+        linearSlide.setPower(power);
+        //while loop that keeps the method going until the motors finish
+        while(linearSlide.isBusy() && (runtime.seconds() < timeoutS)){
+        }
+        //stops driving
+        StopDriving();
+    }
 }
+
+ */

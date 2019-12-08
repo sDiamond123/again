@@ -24,7 +24,6 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         angleconversion = fullcircle/360;
         //number of counts the motor has to run to go 10cm
         countsper10cm = 1050;
-
         linearSlide = hardwareMap.dcMotor.get("linSlide");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
@@ -58,19 +57,15 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //turns 90 degrees to the left
         Step8(90); */
         //moves forward and moves the linear slide up
-        Step9(1, 300);
-        Step10(1, (int)2.8 * countsper10cm, 3);
-        Step11(1, -275);
-        Step12(1, (int)-2.8 * countsper10cm, 3);
-        Step13(1, 275);
+        Step9(1, 200);
+        Step10(1, (int)3 * countsper10cm, 3);
+        Step11(1, -175);
+        //figure out a way for the robot to move back slower using power
+        Step12(1, (int)-3 * countsper10cm, 3);
+        //Step13(1, 275);
         Step14(1, (int)3 * countsper10cm, 3);
     }
     // Repositioning steps
-
-    //
-    //public void rStep1 {
-
-   // }
 
     //moves the robot forward 10 cm
     public void Step1(double power, int distance, int timeoutS){
@@ -122,6 +117,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
     }
     //strafe left to the tape
     public void Step14(double power, int distance, int timeoutS){
+        runtime.reset();
         ResetEncoders();
         leftFront.setTargetPosition(distance);
         rightFront.setTargetPosition(-distance);
@@ -149,7 +145,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //drive at power
         DriveForward(power);
         //while loop that keeps the method going until the motors finish
-        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (timeoutS < runtime.seconds())){
+        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (timeoutS > runtime.seconds())){
         }
         //stops driving
         StopDriving();
@@ -179,9 +175,9 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         rightFront.setTargetPosition(distance);
         rightRear.setTargetPosition(distance);
     }
-    //
     public void TurnRightToAngle(int angle, int timeoutS){
         int turncounts = angleconversion * angle;
+        runtime.reset();
         //reset encoders
         ResetEncoders();
         //set target position
@@ -194,7 +190,6 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         rightFront.setPower(-1);
         rightRear.setPower(-1);
         while((timeoutS < runtime.seconds()) && (leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy())){
-
         }
         //stops driving
         StopDriving();
