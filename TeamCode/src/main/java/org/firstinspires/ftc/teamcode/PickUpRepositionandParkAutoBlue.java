@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class PickUpRepositionandParkAutoRed extends LinearOpMode {
+public class PickUpRepositionandParkAutoBlue extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
     int angleconversion;
     int fullcircle;
@@ -61,14 +61,15 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         Step8(90); */
         //moves forward and moves the linear slide up
         Step9(1, 210, 1);
+        DriveFor(1, (int).8, 1);
         //(int)(2.6 * countsper10cm)
         Step10(1, (int)(countsper10cm), 1);
-        Step12(1, (int)(2.8*countsper10cm), 3);
+        Step12(1, (int)(1.8*countsper10cm), 3);
         Step13(1, -200, (int)1.5);
         //figure out a way for the robot to move back slower using power
         Step14(.4,(int)(-6.2 * countsper10cm), 3);
         //turns the robot 90 degrees to the left
-        Step11(90, 1);
+        Step11(90, 2);
         Step15(1, 250, (int)1);
         Step16(1,(int)(2.5 * countsper10cm), (int)1);
         //total should equal 3.8
@@ -110,10 +111,10 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
     public void Step10(double power, int distance, int timeoutS){
         runtime.reset();
         ResetEncoders();
-        leftFront.setTargetPosition(-distance);
-        rightFront.setTargetPosition(distance);
-        leftRear.setTargetPosition(distance);
-        rightRear.setPower(-distance);
+        leftFront.setTargetPosition(distance);
+        rightFront.setTargetPosition(-distance);
+        leftRear.setTargetPosition(-distance);
+        rightRear.setPower(distance);
         SetToRunToPosition();
         DriveForward(power);
         while((timeoutS > runtime.seconds()) && (leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy())){
@@ -246,11 +247,15 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         ResetEncoders();
         //set target position
         SetTargetPosition(turncounts);
+        leftFront.setTargetPosition(-turncounts);
+        leftRear.setTargetPosition(-turncounts);
+        rightFront.setTargetPosition(turncounts);
+        rightRear.setTargetPosition(turncounts);
         //set to Run to position mode
         SetToRunToPosition();
         //drive at power
-        leftFront.setPower(-1);
-        leftRear.setPower(-1);
+        leftFront.setPower(1);
+        leftRear.setPower(1);
         rightFront.setPower(1);
         rightRear.setPower(1);
         while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (runtime.seconds() < timeoutS)) {

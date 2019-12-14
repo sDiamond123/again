@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class PickUpRepositionandParkAutoRed extends LinearOpMode {
+public class RepositionandParkAutoBlue extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
     int angleconversion;
     int fullcircle;
@@ -43,71 +43,44 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         telemetry.update();
 
 
-        //drives forward to the yellow bricks and opens the wrist
-        //Step1(1, (int)2.5 *countsper10cm);
-        //closes the wrist
-        //Step2();
-        //moves back nearer to the wall
-    /*  Step3(1, 2 * countsper10cm);
-        //turns right now that it has moved back near the wall
-        Step4(90);
-        //drives to the tape
-        Step5(1, (int)2.8 * countsper10cm);
-        //lets go of the brick
-        Step6();
-        //continues to drive forward
-        Step7(1, (int) 3.5 * countsper10cm);
-        //turns 90 degrees to the left
-        Step8(90); */
-        //moves forward and moves the linear slide up
         Step9(1, 210, 1);
         //(int)(2.6 * countsper10cm)
-        Step10(1, (int)(countsper10cm), 1);
-        Step12(1, (int)(2.8*countsper10cm), 3);
-        Step13(1, -200, (int)1.5);
+        Step10(1, (int)(2.6*countsper10cm), 3);
+        Step11(1, -200, (int)1.5);
         //figure out a way for the robot to move back slower using power
-        Step14(.4,(int)(-6.2 * countsper10cm), 3);
-        //turns the robot 90 degrees to the left
-        Step11(90, 1);
-        Step15(1, 250, (int)1);
-        Step16(1,(int)(2.5 * countsper10cm), (int)1);
+        Step12(.4,(-6 * countsper10cm), 3);
+        Step13(1, 250, (int)1.5);
+        Step14(1,(int)(2.5 * countsper10cm), (int)1.5);
         //total should equal 3.8
-        Step17(1, -240, 1);
-        Step18(1, (int)(1.3 * countsper10cm), (int)1);
+        Step15(1, -240, 2);
+        Step16(1, (int)(1.5 * countsper10cm), (int)1.5);
     }
     // Repositioning steps
     //moves the robot forward 10 cm
-    public void Step1(double power, int distance, int timeoutS){
-        DriveFor(power, distance, timeoutS);
-        //wrist.setPower(1);
-    }
-    public void Step2(){
-        wrist.setPower(-1);
-    }
-    public void Step3(double power, int distance, int timeoutS){
-        DriveFor(-power, distance, timeoutS);
-    }
-    public void Step4(int angle, int timeoutS){
-        TurnRightToAngle(angle, timeoutS);
-    }
-    public void Step5(double power, int distance, int timeoutS){
-        DriveFor(power, distance, timeoutS);
-    }
-    public void Step6(){
-        wrist.setPower(0);
-    }
-    public void Step7(double power, int distance, int timeoutS){
-        DriveFor(power, distance, timeoutS);
-    }
-    public void Step8(int angle, int timeoutS){
-        TurnLeftToAngle(angle, timeoutS);
-    }
+
     //moves the linear slide up
     public void Step9(double power, int raise, int timeoutS){
         //the timeout here is how long you are giving the linearslide to raise
         MoveLinearSlide(power, raise, timeoutS);
     }
+    //move forward to the construction site
     public void Step10(double power, int distance, int timeoutS){
+        DriveFor(power, distance, timeoutS);
+    }
+    //move the linearslide down
+    public void Step11(double power, int raise, int timeoutS){
+        MoveLinearSlide(power, raise, timeoutS);
+    }
+    //move back to the wall
+    public void Step12(double power, int distance, int timeoutS){
+        DriveFor(power, distance, timeoutS);
+    }
+    //lift up the linear slide
+    public void Step13(double power, int raise, int timeoutS){
+        MoveLinearSlide(power, raise, timeoutS);
+    }
+    //strafe left to the tape
+    public void Step14(double power, int distance, int timeoutS){
         runtime.reset();
         ResetEncoders();
         leftFront.setTargetPosition(-distance);
@@ -121,58 +94,22 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //stops driving
         StopDriving();
     }
-    //move forward to the construction site
-    public void Step11(int angle, int timeoutS){
-        TurnLeftToAngle(angle, timeoutS);
-    }
-    public void Step12(double power, int distance, int timeoutS){
-        DriveFor(power, distance, timeoutS);
-    }
-    //move the linearslide down
-    public void Step13(double power, int raise, int timeoutS){
-        MoveLinearSlide(power, raise, timeoutS);
-    }
-    //move back to the wall
-    public void Step14(double power, int distance, int timeoutS){
-        DriveFor(power, distance, timeoutS);
-    }
-    //lift up the linear slide
     public void Step15(double power, int raise, int timeoutS){
         MoveLinearSlide(power, raise, timeoutS);
     }
-    //strafe left to the tape
     public void Step16(double power, int distance, int timeoutS){
-        /* runtime.reset();
+        runtime.reset();
         ResetEncoders();
-        leftFront.setTargetPosition(distance);
-        rightFront.setTargetPosition(-distance);
-        leftRear.setTargetPosition(-distance);
-        rightRear.setPower(distance);
+        leftFront.setTargetPosition(-distance);
+        rightFront.setTargetPosition(distance);
+        leftRear.setTargetPosition(distance);
+        rightRear.setPower(-distance);
         SetToRunToPosition();
         DriveForward(power);
         while((timeoutS > runtime.seconds()) && (leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy())){
         }
         //stops driving
-        StopDriving(); */
-        DriveFor(power, -distance, timeoutS);
-    }
-    public void Step17(double power, int raise, int timeoutS){
-        MoveLinearSlide(power, raise, timeoutS);
-    }
-    public void Step18(double power, int distance, int timeoutS){
-        /* runtime.reset();
-        ResetEncoders();
-        leftFront.setTargetPosition(distance);
-        rightFront.setTargetPosition(-distance);
-        leftRear.setTargetPosition(-distance);
-        rightRear.setPower(distance);
-        SetToRunToPosition();
-        DriveForward(power);
-        while((timeoutS > runtime.seconds()) && (leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy())){
-        }
-        //stops driving
-        StopDriving(); */
-        DriveFor(power, -distance, timeoutS);
+        StopDriving();
     }
     public void StopDriving(){
         leftFront.setPower(0);
@@ -253,7 +190,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         leftRear.setPower(-1);
         rightFront.setPower(1);
         rightRear.setPower(1);
-        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (runtime.seconds() < timeoutS)) {
+        while((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (runtime.seconds() > timeoutS)) {
 
         }
         //stops driving
