@@ -38,7 +38,7 @@ public class ParkUnderTapeAutoRed extends LinearOpMode {
         waitForStart();
 
         //red team park on tape
-        Step1(1, (int) 2.8 * countsper10cm, 3);
+        Step1(1, (int)(2.8*countsper10cm), 3);
     }
 
     //moves the robot forward 10 cm

@@ -75,8 +75,8 @@ public class RepositionandParkAutoBlue extends LinearOpMode {
         runtime.reset();
         ResetEncoders();
         leftFront.setTargetPosition(distance);
-        rightFront.setTargetPosition(-distance);
         leftRear.setTargetPosition(-distance);
+        rightFront.setTargetPosition(-distance);
         rightRear.setPower(distance);
         SetToRunToPosition();
         DriveForward(power);
