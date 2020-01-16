@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class ParkUnderTapeAutoBlue extends LinearOpMode {
+public class ParkUnderTapeAutoBlueWall extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
     int angleconversion;
     int fullcircle;
@@ -38,8 +38,11 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
 
-        //red team park on tape
-        Step1(1, (int)(2.8 * countsper10cm), 3);
+        //blue team park on tape
+        //Step1(1, (int)(2.8 * countsper10cm), 3);
+        DriveFor(1, (int)(.5 * countsper10cm), 1);
+        StrafeRight(1, (int)(3 * countsper10cm), 3);
+        DriveFor(1, (int)(-.8 * countsper10cm), 1);
     }
 
     //moves the robot forward 10 cm
@@ -52,6 +55,22 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
+    public void StrafeRight (double power, int distance, int timeoutS) {
+        runtime.reset();
+        //reset encoders
+        ResetEncoders();
+        //set target position
+        leftFront.setTargetPosition(-distance);
+        leftRear.setTargetPosition(distance);
+        rightFront.setTargetPosition(distance);
+        rightRear.setTargetPosition(-distance);
+        // set to Run to position mode
+        SetToRunToPosition();
+        //drive at power
+        DriveForward(power);
+        while ((leftFront.isBusy() || leftRear.isBusy() || rightFront.isBusy() || rightRear.isBusy()) && (runtime.seconds() < timeoutS)) {
+        }
+    }
     public void DriveFor(double power, int distance, int timeoutS) {       //reset encoders
         runtime.reset();
         ResetEncoders();
@@ -61,7 +80,7 @@ public class ParkUnderTapeAutoBlue extends LinearOpMode {
         //drive at power
         DriveForward(power);
         //while loop that keeps the method going until the motors finish
-        while ((leftFront.isBusy() && leftRear.isBusy() && rightFront.isBusy() && rightRear.isBusy()) && (timeoutS > runtime.seconds())) {
+        while ((leftFront.isBusy() || leftRear.isBusy() || rightFront.isBusy() || rightRear.isBusy()) && (timeoutS > runtime.seconds())) {
         }
         //stops driving
         StopDriving();
