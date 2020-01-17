@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class ParkUnderTapeAutoBlueWall extends LinearOpMode {
+public class ParkUnderTapeAutoBlueWallWAIT extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
     int angleconversion;
     int fullcircle;
@@ -39,15 +39,17 @@ public class ParkUnderTapeAutoBlueWall extends LinearOpMode {
         waitForStart();
 
         //blue team park on tape
-        //Step1(1, (int)(2.8 * countsper10cm), 3);
+        Step1(24);
         DriveFor(1, (int)(.5 * countsper10cm), 1);
         StrafeRight(1, (int)(3.5 * countsper10cm), 3);
         DriveFor(1, (int)(-.8 * countsper10cm), 1);
     }
 
     //moves the robot forward 10 cm
-    public void Step1(double power, int distance, int timeoutS) {
-        DriveFor(power, distance, timeoutS);
+    public void Step1(int timeoutS) {
+        runtime.reset();
+        while(runtime.seconds() < timeoutS){
+        }
     }
     public void StopDriving() {
         leftFront.setPower(0);

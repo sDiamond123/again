@@ -38,7 +38,7 @@ public class ParkUnderTapeAutoRedWall extends LinearOpMode {
         waitForStart();
         //red team park on tape
         DriveFor(1, (int)(.5 * countsper10cm), 1);
-        StrafeLeft(1, (int)(3 * countsper10cm), 3);
+        StrafeLeft(1, (int)(3.5 * countsper10cm), 3);
         DriveFor(1, (int)(-.8 * countsper10cm), 1);
     }
 
@@ -68,7 +68,7 @@ public class ParkUnderTapeAutoRedWall extends LinearOpMode {
         while ((leftFront.isBusy() || leftRear.isBusy() || rightFront.isBusy() || rightRear.isBusy()) && (runtime.seconds() < timeoutS)) {
         }
     }
-    public void DriveFor(double power, int distance, int timeoutS) {       //reset encoders
+    public void DriveFor(double power, int distance, int timeoutS) {
         runtime.reset();
         ResetEncoders();
         //set target position

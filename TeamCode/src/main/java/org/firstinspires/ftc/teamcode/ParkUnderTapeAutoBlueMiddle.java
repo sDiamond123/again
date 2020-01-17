@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class ParkUnderTapeAutoBlueWall extends LinearOpMode {
+public class ParkUnderTapeAutoBlueMiddle extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear;
     int angleconversion;
     int fullcircle;
@@ -42,7 +42,7 @@ public class ParkUnderTapeAutoBlueWall extends LinearOpMode {
         //Step1(1, (int)(2.8 * countsper10cm), 3);
         DriveFor(1, (int)(.5 * countsper10cm), 1);
         StrafeRight(1, (int)(3.5 * countsper10cm), 3);
-        DriveFor(1, (int)(-.8 * countsper10cm), 1);
+        DriveFor(1, (int)(2 * countsper10cm), 1);
     }
 
     //moves the robot forward 10 cm

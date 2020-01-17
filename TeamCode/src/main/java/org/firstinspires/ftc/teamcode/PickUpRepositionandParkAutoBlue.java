@@ -68,7 +68,7 @@ public class PickUpRepositionandParkAutoBlue extends LinearOpMode {
         //strafe right
         Step10(1, (int)(.9 * countsper10cm), 1);
         //drive to site
-        Step12(1, (int)(1.75*countsper10cm), 2);
+        Step12(1, (int)(1.8*countsper10cm), 2);
         //lower the linear slide
         Step13(1, -260, 2);
         //robot moves back slowly with the site in tow
