@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class PickUpRepositionandParkAutoRed extends LinearOpMode {
+public class PickUpRepositionandParkAutoBlueMiddle extends LinearOpMode {
     DcMotor leftFront, leftRear, rightFront, rightRear, linearSlide;
     int angleconversion;
     int fullcircle;
@@ -61,37 +61,40 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         //turns 90 degrees to the left
         Step8(90); */
         //moves the linear slide up
-        Step9(1, 260, 1);
+        Step9(1, 290, 1);
         //moves forward
         DriveFor(1, (countsper10cm), 1);
         //(int)(2.6 * countsper10cm)
         //strafe right
         Step10(1, (int)(.9 * countsper10cm), 1);
         //drive to site
-        Step12(1, (int)(1.8*countsper10cm), 2);
+        Step12(1, (int)(1.9*countsper10cm), 2);
         //lower the linear slide
-        Step13(1, -260, 2);
+        Step13(1, -280, 2);
         //robot moves back slowly with the site in tow
-        Step14(.5,(-24*countsper10cm), 4);
+        Step14(.5,(-24*countsper10cm), 3);
         //turns the robot 90 degrees to the right; value was 210
         //Step11(210, 3);
         //raises the linear slide
         Step15(1, 275, (int)1);
         //moves a touch off the wall
         //DriveFor(1, (int)(.2 * countsper10cm), 1);
-        StrafeLeft(1, (int)(2.5*countsper10cm), 3);
+        StrafeRight(1, (int)(2.5*countsper10cm), 3);
         //moves away from the construction site
         //DriveFor(.5, countsper10cm, 1);
         //strafes to the wall
         //StrafeRight(1, (int)(2*countsper10cm), 2);
         //lowers the linear slide
         Step17(1, -275, 1);
-        //Step16(1,(int)(.3 * countsper10cm), (int)1);
-        StrafeLeft(1, (int)(1.6 * countsper10cm), 1);
-        //moves back to under the tape
         Step16(.5,(int)(-.5 * countsper10cm), (int)1);
+        Step16(.5, (int)(2.4*countsper10cm), 3);
+        //Step16(1,(int)(.3 * countsper10cm), (int)1);]
+        StrafeRight(1, (int)(1.6 * countsper10cm), 1);
+        //moves back to the wall
+        //Step16(.5,(int)(-.5 * countsper10cm), (int)1);
         //total should equal 3.8
-        //lowers the linear slide
+        //moves to the middle
+        //Step16(.5, (int)(2.75*countsper10cm), 3);
     }
     // Repositioning steps
     //moves the robot forward 10 cm
@@ -126,7 +129,7 @@ public class PickUpRepositionandParkAutoRed extends LinearOpMode {
         MoveLinearSlide(power, raise, timeoutS);
     }
     public void Step10(double power, int distance, int timeoutS){
-        StrafeRight(power, distance, timeoutS);
+        StrafeLeft(power, distance, timeoutS);
     }
     //move forward to the construction site
     public void Step11(int angle, int timeoutS){

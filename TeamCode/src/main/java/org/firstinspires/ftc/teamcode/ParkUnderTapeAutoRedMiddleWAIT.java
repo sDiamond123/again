@@ -40,7 +40,7 @@ public class ParkUnderTapeAutoRedMiddleWAIT extends LinearOpMode {
         Step1(24);
         DriveFor(1, (int)(.5 * countsper10cm), 1);
         StrafeLeft(1, (int)(3.5 * countsper10cm), 3);
-        DriveFor(1, (int)(2 * countsper10cm), 1);
+        DriveFor(1, (int)(1.9 * countsper10cm), 1);
     }
 
     //moves the robot forward 10 cm
